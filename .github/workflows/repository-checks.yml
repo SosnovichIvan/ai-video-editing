@@ -1,0 +1,42 @@
+name: Repository checks
+on:
+  pull_request:
+    branches: [develop, main]
+permissions:
+  contents: read
+jobs:
+  repository-checks:
+    name: Repository checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate pull request direction
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+          SOURCE_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          TARGET_REPO: ${{ github.repository }}
+        run: |
+          if [ "$BASE" = main ]; then
+            test "$HEAD" = develop
+            test "$SOURCE_REPO" = "$TARGET_REPO"
+          else
+            test "$BASE" = develop
+            test "$HEAD" != main
+            test "$HEAD" != develop
+          fi
+      - uses: actions/checkout@v4
+      - name: Verify public repository contents
+        shell: bash
+        run: |
+          test -s README.md
+          test -s AGENTS.md
+          test -s CONTRIBUTING.md
+          test -s docs/editing-workflow.md
+          if git ls-files | grep -Ei '(^local/|^\.execution-state/|(^|/)\.env($|\.)|\.(mp4|mov|mkv|webm|mp3|wav|aac|m4a|zip|whl)$)'; then
+            echo 'Local materials must not be tracked.'
+            exit 1
+          fi
+          if git grep -n -E '[/]Users[/]|[/]home[/]|gh[pousr]_[A-Za-z0-9]{20,}' -- .; then
+            echo 'Personal paths and credentials must not be published.'
+            exit 1
+          fi

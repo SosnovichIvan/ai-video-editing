@@ -1,0 +1,23 @@
+# Local footage, music, exports, session state and personal notes
+local/
+.execution-state/
+.env
+.env.*
+!.env.example
+.DS_Store
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+node_modules/
+*.mp4
+*.mov
+*.MOV
+*.mkv
+*.webm
+*.mp3
+*.wav
+*.aac
+*.m4a
+*.zip
+*.whl
