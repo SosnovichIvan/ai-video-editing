@@ -1,20 +1,41 @@
-# Editing workflow
+# Рабочий процесс
 
-1. Inventory footage: duration, orientation, frame rate, audio and colour metadata.
-2. Review motion across each candidate moment, not just a single thumbnail.
-3. Record selections as source file plus input/output times. Reject intersecting intervals from the same source and duplicate source files.
-4. Choose music for the requested language, theme and energy. Analyse its pulse and audible start; verify low-confidence tempo estimates with a second method.
-5. Assemble a narrative: animated opener, training progression, strong actions and a deliberate finish. Never extend a timeline by repeating the same moment.
-6. Apply smooth transitions, selected speed ramps and consistent colour management. Check frame accounting after overlapping transitions.
-7. Normalize audio using measured loudness. Default to approximately -14 LUFS with true-peak headroom for AAC encoding; verify the actual export.
-8. Export for the intended playback environment. For compact vertical delivery, a starting profile is HEVC/hvc1, 1080×1920, 30 fps, approximately 6 Mbps video, AAC stereo, BT.709 and faststart. Adapt to the source rather than assuming every job is vertical.
-9. Fully decode the result, review every scene and transition, and check duration, audio start, clipping, silence, black frames and freezes.
-10. Copy the deliverable to the requested location and verify that its checksum matches the checked render.
+## Бриф и подготовка
 
-## Local session convention
+Зафиксируйте цель, зрителя, действие после просмотра, длительность, площадку, ориентацию, язык, ограничения и состав результата. Сценарий, промпты и готовый видеофайл — разные результаты, выбирайте запрошенный. Начните с [брифа](../templates/brief.md).
 
-Keep source files, music, plans, intermediates and reports in `local/`. A plan should identify both prepared media and original source time ranges so a cached render cannot hide repeated footage.
+Для монтажа измерьте продолжительность, размер, ориентацию с учётом rotation metadata, fps и его переменность, аудиоканалы и цветовые метаданные. Сохраните оригиналы. Для отбора просматривайте движение целиком, а не один thumbnail. Отмечайте качество речи, смаз, фокус, нежелательные объекты и доступные крупности.
 
-## Reference tooling
+## Сценарий и монтажный план
 
-The initial local session used FFmpeg and the third-party [video-editor skill](https://github.com/genchebur90-debug/video-editor-skill/tree/main/video-editor). That package is not vendored or relicensed here. Review its license and instructions before reuse or redistribution.
+Стройте последовательность вокруг задачи зрителя. Укажите, что видно, что слышно и какую функцию выполняет сцена. Сверьте хронометраж чтением текста вслух, оставьте время для пауз и демонстрации.
+
+Каждый монтажный клип связывайте с оригиналом и диапазоном source in/out. Диапазоны задавайте как [in, out), с общей временной базой. Ускорение, замедление, стоп-кадр, loop, reverse и повтор должны быть видны в плане. При variable speed укажите сегменты или кривую скорости. Не считайте диапазон proxy-файла диапазоном оригинала без сохранённого преобразования времени.
+
+В тренировочных highlights по умолчанию исключайте повторные и пересекающиеся source ranges одного оригинала. Для других жанров следуйте брифу. Один длинный исходник может дать несколько непересекающихся сцен. Копии и транскоды одного файла имеют общую source identity. Переходы используют дополнительные кадры handles и тоже входят в проверку уникальности.
+
+При постоянной скорости длительность сцены равна (out − in) / speed. Длительность последовательности с overlapping transitions равна сумме длительностей сцен минус сумма перекрытий. Не вычитайте обычную прямую склейку и fade внутри клипа. Сверяйте расчёт с фактическим таймлайном.
+
+## Изображение
+
+Мотивируйте склейки действием, смыслом, взглядом и ритмом. Музыкальные акценты измеряйте и проверяйте на слух. Используйте slow motion с учётом исходной частоты кадров. Интерполяцию проверяйте на артефакты рук, лиц, мяча и быстрых движений.
+
+Сохраните ориентацию и важные объекты при кадрировании. Для разных соотношений сторон отдельно проверьте композицию. Преобразование HDR в SDR выполняйте с учётом transfer, primaries и matrix исходника, tone mapping и метаданных результата. Само назначение BT.709 tags не преобразует HDR-пиксели.
+
+## Звук и текст
+
+Голос должен оставаться разборчивым под музыкой. Измеряйте loudness и true peak до обработки и в закодированном результате. Около −14 LUFS integrated и ceiling около −1 dBTP могут служить начальной настройкой web-ролика, если у площадки или брифа нет других требований. Это рабочие ориентиры, а не универсальные требования платформ.
+
+Начало музыки, natural sound, ducking и конец фразы определяются сценарием. Не обрезайте музыкальную или речевую фразу без проверки. Транскрипцию сверяйте с аудио, особенно имена, числа и термины. Для embedded и внешних субтитров проверьте синхронизацию, читаемость и отсутствие обрезанных строк.
+
+## Экспорт и приёмка
+
+Выбирайте контейнер, codec, размер, fps и bitrate под среду просмотра. Для широкой совместимости можно начать с MP4/H.264, AAC и faststart. Для компактной HEVC-доставки проверьте поддержку устройства и корректный hvc1 tag, если он нужен проигрывателю. Разрешение 1080×1920 и 30 fps выбирайте только для соответствующей вертикальной задачи. Сохраняйте исходную частоту кадров, если её изменение не нужно.
+
+Полностью декодируйте финальный экспорт и просмотрите каждую сцену, переход и начало/конец. Проверьте звук, clipping, неожиданные чёрные кадры и freezes. Автоматические детекторы дают кандидаты на дефекты, затем нужен контекстный просмотр. Преднамеренный fade или стоп-кадр допустимы. Сверьте duration, metadata, границы диапазонов и версию файла с монтажным планом. HEVC-сжатие с потерями описывайте как визуально качественное, если это подтверждено просмотром.
+
+При копировании результата сравните checksum с проверенным экспортом. Заполните [отчёт](../templates/review.md), перечислив выполненные проверки и неизвестное.
+
+## Сторонний инструмент
+
+В исходной сессии использовался [video-editor skill](https://github.com/genchebur90-debug/video-editor-skill/tree/main/video-editor). Он не включён в этот репозиторий. Перед его повторным использованием ознакомьтесь с лицензией и инструкциями установленной версии.

@@ -1,12 +1,26 @@
-# AI Video Editing
+# Работа с AI Video Editing
 
-- Work only in this project. Never write into a neighbouring project such as archDesign.
-- Read README.md and docs/editing-workflow.md before editing video.
-- Existing private session context is in local/CONTINUATION.md when present. It must never be committed.
-- Media, downloads, environments, render plans, session state and generated files belong in ignored local/ directories. Final copies go to the location requested by the user.
-- Reuse the locally available video-editor skill after reading its SKILL.md. Follow its measured audio, colour-management and quality-control practices.
-- Keep an auditable mapping from each output scene to its original source time range. Reject repeated or overlapping source intervals.
-- Preserve prior deliverables unless the user requests replacement.
-- Inspect every scene and transition and fully decode the actual final export before delivery.
-- Follow CONTRIBUTING.md for branches, review, verification and release rules. Never bypass protected branches.
-- Do not upload personal footage, music, logs, private URLs, credentials or machine-specific paths to the public repository.
+Работай в этом проекте. Перед изменениями прочитай README.md и CONTRIBUTING.md. Для работы над роликом прочитай docs/editing-workflow.md и только подходящий задаче навык.
+
+## Выбор навыка
+
+- `.agents/skills/video-story/SKILL.md` — идея, сценарий и раскадровка.
+- `.agents/skills/video-select/SKILL.md` — анализ и отбор исходников.
+- `.agents/skills/video-generate/SKILL.md` — промпты для генерации и согласованность сцен.
+- `.agents/skills/video-edit/SKILL.md` — монтаж и цвет.
+- `.agents/skills/video-sound/SKILL.md` — звук и субтитры.
+- `.agents/skills/video-review/SKILL.md` — проверка ролика и экспорта.
+
+Если локально доступен сторонний video-editor skill и задача требует рендера, прочитай его SKILL.md перед применением. Сверь доступные инструменты. Если skill отсутствует, используй доступный редактор либо FFmpeg в рамках задачи. Для подготовки сценария или промптов рендер не требуется.
+
+## Правила проекта
+
+Соблюдай бриф, сохраняй авторский смысл, имена, факты и обязательные фрагменты. Не выдавай придуманные факты за сведения пользователя. Недостающие несущественные параметры выбирай явно, вопросы оставляй для решений, влияющих на результат.
+
+У каждого использованного исходного фрагмента должны быть файл и диапазон времени. Для тренировочной нарезки уникальность моментов включена по умолчанию. Для других жанров повтор, петля или flashback допустимы по брифу и отмечаются в плане. Пересечение исходных диапазонов проверяется отдельно от перекрытия переходов на таймлайне.
+
+Храни личные материалы, session state, планы и отчёты в `local/`. Прочитай `local/CONTINUATION.md`, если он существует и относится к текущей задаче. Сохраняй предыдущие результаты, если пользователь не просит заменить их. В публичный Git не добавляй footage, музыку, credentials, приватные URL или пути конкретного компьютера.
+
+Действия с платной генерацией, внешней загрузкой исходников и публикацией определяются запросом пользователя и действующими разрешениями. Подготовка промпта сама по себе не запускает генерацию.
+
+Перед доставкой видео проверь фактический финальный файл, полностью декодируй его при наличии инструмента и просмотри каждую сцену и переход. Укажи ограничения проверки, если просмотра, аудиопрослушивания или декодирования не было. Следуй CONTRIBUTING.md для веток, ревью и выпуска.

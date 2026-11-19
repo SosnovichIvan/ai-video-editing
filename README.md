@@ -1,30 +1,33 @@
 # AI Video Editing
 
-ИИ-видеомонтаж · AI-assisted video editing.
+Библиотека навыков, правил и промптов для работы с видео с помощью ИИ. Подходит для сценариев, раскадровок, генерации отдельных кадров, монтажа исходников, звука, субтитров и проверки экспорта.
 
-A workspace for producing dynamic, music-driven video montages with an AI assistant and FFmpeg.
+## С чего начать
 
-The first editing workflow focuses on training highlights: selecting distinct source moments, matching cuts to the music, adding slow motion at key actions, animating an opening image, and exporting compact HEVC video.
+Заполните [бриф](templates/brief.md) или опишите результат своими словами. Для нового ролика начните со сценария. Для готовых исходников начните с просмотра и отбора материала. Для проверки готового видео используйте video-review.
 
-## Project status
+| Задача | Навык | Промпт |
+| --- | --- | --- |
+| Идея, сценарий, раскадровка | [video-story](.agents/skills/video-story/SKILL.md) | [Сценарий](prompts/story.md) |
+| Просмотр и отбор исходников | [video-select](.agents/skills/video-select/SKILL.md) | [Отбор](prompts/select.md) |
+| Генерация видео по тексту или изображению | [video-generate](.agents/skills/video-generate/SKILL.md) | [Генерация](prompts/generate.md) |
+| Монтаж, темп, переходы, цвет | [video-edit](.agents/skills/video-edit/SKILL.md) | [Монтаж](prompts/edit.md) |
+| Голос, музыка, субтитры | [video-sound](.agents/skills/video-sound/SKILL.md) | [Звук](prompts/sound.md) |
+| Ревью и проверка результата | [video-review](.agents/skills/video-review/SKILL.md) | [Проверка](prompts/review.md) |
 
-The project workspace is initialized. Existing session scripts, original media, render plans and quality reports are kept locally under `local/`. This public repository currently contains project documentation, editing requirements and collaboration rules; it is not yet a packaged editing application.
+Навыки лежат в `.agents/skills/` и содержат `SKILL.md`. В среде с поддержкой проектных навыков их можно вызывать по имени, например `$video-edit`. В другом ИИ-инструменте передайте соответствующий SKILL.md и промпт вместе с материалами. Реальная генерация, просмотр и рендер зависят от доступных инструментов.
 
-## Editing principles
+## Примеры заданий
 
-- Keep source selection traceable to its file and input time range.
-- Do not reuse footage or overlap selected source intervals within one montage.
-- Match transitions to measured musical accents; inspect the result visually.
-- Start music at the first frame when requested and avoid abrupt audio endings.
-- Use slow motion selectively for meaningful actions.
-- Preserve the source orientation and manage HDR-to-SDR conversion explicitly.
-- Check the exported file for decode errors, unintended black frames, freezes, clipping and silence.
-- Describe HEVC exports as perceptually high-quality compression, not mathematically lossless video.
+- «Собери вертикальный ролик на 30 секунд из моих тренировок, музыка с первого кадра, каждый исходный момент используется один раз».
+- «Подготовь сценарий продуктового видео на 60 секунд с демонстрацией трёх функций и раскадровкой».
+- «Создай промпты для пяти связанных сцен, сохрани героя, одежду и освещение между кадрами».
+- «Проверь готовый экспорт, перечисли дефекты с таймкодами и приоритетом».
 
-## Local material
+## Рабочие материалы
 
-`local/` is excluded from Git. Keep original footage, copyrighted tracks, downloaded tools, virtual environments, personal notes and generated exports there. Completed deliverables may also be copied to the Desktop.
+Бриф → сценарий и [раскадровка](templates/storyboard.md) → [монтажный план](templates/edit-plan.md) → черновик → [отчёт проверки](templates/review.md) → экспорт.
 
-Do not add media to the public repository without a separate publication request.
+Это набор инструкций, а не установленный видеоредактор. Репозиторий содержит текстовые материалы. Исходники, музыка, планы конкретных роликов, инструменты и экспорты хранятся в игнорируемом `local/`. Копируйте заполненные шаблоны туда. Финальный файл сохраняется в место, заданное пользователем.
 
-See [editing workflow](docs/editing-workflow.md) and [contribution rules](CONTRIBUTING.md).
+Подробные [правила монтажа](docs/editing-workflow.md), [инструкции агенту](AGENTS.md) и [порядок внесения изменений](CONTRIBUTING.md).

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Сценарий и раскадровка"
+  short_description: "Сценарий и раскадровка для работы над видеороликом"
+  default_prompt: "Используй $video-story для моей задачи по видео."
