@@ -1,0 +1,4 @@
+interface:
+  display_name: "Отбор исходников"
+  short_description: "Отбор исходников для работы над видеороликом"
+  default_prompt: "Используй $video-select для моей задачи по видео."

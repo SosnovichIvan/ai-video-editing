@@ -2,7 +2,7 @@
 
 Work in a separate branch, normally `codex/<topic>`. Open feature pull requests into `develop`; only `develop` may target `main`. Do not push directly or force-push to `develop` or `main`.
 
-Both branches require pull requests, successful repository checks and review, including for administrators. Never bypass these requirements to complete an automated task.
+Both branches require pull requests and successful repository checks, including for administrators. Authors may merge their own pull requests where the branch settings permit it. Resolve open conversations before merging. Follow the configured protection rules.
 
 This bootstrap contains documentation and workflow configuration, not a release artifact. Future application changes must add meaningful lint, type, test and coverage checks appropriate to their stack. The owner requires at least 90% line and branch coverage for authored executable application code; an absent metric is not a passing result. Coverage is N/A for the current documentation-only bootstrap.
 
