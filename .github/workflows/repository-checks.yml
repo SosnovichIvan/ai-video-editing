@@ -40,3 +40,37 @@ jobs:
             echo 'Personal paths and credentials must not be published.'
             exit 1
           fi
+      - name: Verify video library structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          for skill in video-story video-select video-generate video-edit video-sound video-review; do
+            test -s ".agents/skills/$skill/SKILL.md"
+            test -s ".agents/skills/$skill/agents/openai.yaml"
+          done
+          for prompt in story select generate edit sound review; do
+            test -s "prompts/$prompt.md"
+          done
+          for template in brief storyboard edit-plan review; do
+            test -s "templates/$template.md"
+          done
+      - name: Check local Markdown links
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          errors = []
+          for path in Path('.').rglob('*.md'):
+              if '.git' in path.parts:
+                  continue
+              for target in re.findall(r'\]\(([^)]+)\)', path.read_text()):
+                  if '://' in target or target.startswith('#'):
+                      continue
+                  destination = target.split('#', 1)[0]
+                  if not (path.parent / destination).exists():
+                      errors.append(f'{path}: missing {target}')
+          if errors:
+              raise SystemExit('\n'.join(errors))
+          print('Local Markdown links are valid')
+          PY

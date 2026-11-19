@@ -1,0 +1,4 @@
+interface:
+  display_name: "Звук и субтитры"
+  short_description: "Звук и субтитры для работы над видеороликом"
+  default_prompt: "Используй $video-sound для моей задачи по видео."

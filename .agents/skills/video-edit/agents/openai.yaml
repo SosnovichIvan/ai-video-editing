@@ -1,0 +1,4 @@
+interface:
+  display_name: "Монтаж видео"
+  short_description: "Монтаж видео для работы над видеороликом"
+  default_prompt: "Используй $video-edit для моей задачи по видео."
